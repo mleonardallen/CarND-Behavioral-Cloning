@@ -61,5 +61,9 @@ The README provides sufficient details of the characteristics and qualities of t
 
 The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
 
+### Data Collection
 ![Data Collection through Udacity Simulator](./images/data-collection.png)
+
+### Sample Images
+![Sample Images](./images/sample-images.png)
 
