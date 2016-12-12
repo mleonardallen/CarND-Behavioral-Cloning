@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this project, a trained car drives in a simulated environment by cloning the behavior as seen during training mode.
+In this project, a trained car drives in a simulated environment by cloning the behavior as seen during training mode.  Leveraging TensorFlow and Keras, a deep learning network predicts the proper steering angle given training examples.
 
 ## Dependencies
 
@@ -40,3 +40,19 @@ Once you’ve downloaded it, extract it and run it.
 Autonomous mode requires requires a server to receive steering commands.  Without the server not running, the car will just sit there in the simulated environment.
 
 `python drive.py model.json`
+
+## Network
+
+### Approach
+
+The README thoroughly discusses the approach taken for deriving and designing a model architecture fit for solving the given problem.
+
+### Architecture
+
+The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
+
+## Training
+
+The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
+
+
