@@ -5,6 +5,7 @@
 
 In this project, a car is trained to drive in a simulated environment by cloning the behavior seen during training mode.
 
+### Udacity Simulator
 
 Udacity created a simulator based on the Unity engine that uses real game physics to create a close approximation to real driving.
 Download it here:
@@ -14,7 +15,6 @@ Download it here:
 * [Windows 32-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f4b6_simulator-windows-32/simulator-windows-32.zip)
 * [Windows 64-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f3a4_simulator-windows-64/simulator-windows-64.zip)
 
-### Running the Simulator
 Once you’ve downloaded it, extract it and run it.
 
 ### Files
