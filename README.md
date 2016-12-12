@@ -62,8 +62,17 @@ The README provides sufficient details of the characteristics and qualities of t
 The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
 
 ### Data Collection
+
 ![Data Collection through Udacity Simulator](./images/data-collection.png)
 
 ### Sample Images
+
 ![Sample Images](./images/sample-images.png)
 
+### Image Generator
+
+The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
+
+### Image Preprocessing
+
+Image preprocessing is contained within the network pipeline.  This allows reuse so that no additional modifications are required within `drive.py`.
