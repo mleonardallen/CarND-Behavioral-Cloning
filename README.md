@@ -23,7 +23,7 @@ Install Python Dependencies with pip (pip install ...)
 * `model.json` - The model architecture.
 * `model.h5` - The model weights.
 
-### Udacity Simulator
+## Udacity Simulator
 
 Udacity created a simulator based on the Unity engine that uses real game physics to create a close approximation to real driving.
 
