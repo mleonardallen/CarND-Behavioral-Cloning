@@ -45,7 +45,13 @@ Autonomous mode requires requires a server to receive steering commands.  Withou
 
 ### Approach
 
+Transfer Learning
+Bottleneck Features
+NVIDIA Network
+
 The README thoroughly discusses the approach taken for deriving and designing a model architecture fit for solving the given problem.
+
+[nVidia Architecture](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
 
 ### Architecture
 
@@ -55,4 +61,5 @@ The README provides sufficient details of the characteristics and qualities of t
 
 The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
 
+![Data Collection through Udacity Simulator](./images/data-collection.png)
 
