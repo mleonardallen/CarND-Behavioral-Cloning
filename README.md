@@ -14,12 +14,8 @@ Download it here:
 * [Windows 32-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f4b6_simulator-windows-32/simulator-windows-32.zip)
 * [Windows 64-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f3a4_simulator-windows-64/simulator-windows-64.zip)
 
-<h4 id="running-the-simulator">Running the Simulator</h4>
-<p>Once you’ve downloaded it, extract it and run it.</p>
-<p>When you first run the simulator, you’ll see a configuration screen asking what size and graphical quality you would like. We suggest running at the smallest size and the fastest graphical quality. 
-We also suggest closing most other applications (especially graphically intensive applications) on your computer, so that your machine can devote its resource to running the simulator.</p>
-</div>
-
+### Running the Simulator
+Once you’ve downloaded it, extract it and run it.
 
 ### Files
 * `model.py` - The script used to create and train the model.
