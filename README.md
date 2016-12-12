@@ -1,7 +1,4 @@
-# Self-Driving Car Engineer Nanodegree
-
-## Behavioral Cloning
-
+# Self-Driving Car Engineer Nanodegree - Behavioral Cloning
 
 * `model.py` - The script used to create and train the model.
 * `drive.py` - The script to drive the car.
