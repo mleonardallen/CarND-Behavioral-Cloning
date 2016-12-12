@@ -76,3 +76,7 @@ The entire set of images used for training would consume a large amount of memor
 ### Image Preprocessing
 
 Image preprocessing is contained within the network pipeline.  This allows reuse so that no additional modifications are required within `drive.py`.
+
+First the image is cropped above the horizon to reduce the amount of information the network is required to learn.  Next the image is resized to further reduce required processing.  Finally normalization is applied to each mini-batch.  This helps keep weight values small, improving numerical stability. In addition since our mean is relatively close to 0, the gradient descent optimization will have less searching to do when minimizing loss.
+
+![Image Preprocessing](./images/preprocess.png)
