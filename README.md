@@ -55,11 +55,21 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 ### Architecture
 
-> The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
+My architecture is modeled after the network depicted in nVidia's [End to End Learning for Self-Driving Cars](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) paper.  The architecture is a traditional feed-foward layered architecture in which the output of one layer is fed to the layer above.  At a high level the network consists of 4 convolutional layers, followed by 4 fully connected layers, with the final layer as an output layer.  Since we are working with a regression problem, the output layer is a single continuous value, as apposed to the softmax probabilities used for classification tasks such as traffic sign identification.
+
+Before the first convolutional network a small amount of preprocessing takes place within the pipeline.  This includes cropping the image, resizing, and batch normalization.
+
+Each convolitional has a 1x1 stride, and uses a 2x2 max pooling operation to reduce spatial resolution. The first two convolutional layers use a 5x5 filter, while the second two use a 3x3 filter as the input dimensionality is reduced.
+
+For non-linearity, RELU activates are used for each convolutional, and fully connected layer except for the final output layer.
+
+For regularization, a spatial dropout operation is added after each convolutional layer.  Spatial dropout layers drop entire 2D features maps instead of individual features.
+
+The output from the forth convolutional layer is flattened and fed into a classifier composed of four fully connected layers.  The fully connected layers each reduce the number of features with the final layer outputting a single coninuous value.
+
+See the diagram below.  This diagram is modified from the diagram found in the the nVidia paper.  The values have been modified to represent input sizes of our recorded training data.
 
 ![nVidia Architecture](./images/architecture.png)
-
-
 
 ## Data Collection
 
