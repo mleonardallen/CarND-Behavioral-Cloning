@@ -45,8 +45,6 @@ Autonomous mode requires requires a server to receive steering commands.  Withou
 
 ### Approach
 
-> The README thoroughly discusses the approach taken for deriving and designing a model architecture fit for solving the given problem.
-
 Given that we are trying to map raw pixel data to a steering angle, the first thing to note when considering an architecture is that this is a regression problem, and therefore the final layer must output a continous value.
 
 I considered using transfer learning using ImageNet weights along with a network such as VGG, ResNet, or GoogLeNet, however I consider images contained in ImageNet to be a lot different than those from the Udacity simulator.  If leveraging transfer learning, then perhaps extracting earlier layers could be useful where more specific features have not been learned.  Even though ImageNet is built on a classfication problem, since we can remove the top layers, we can still replace the final layer to output a single continuous value.
