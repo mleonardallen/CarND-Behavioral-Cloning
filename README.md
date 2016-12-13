@@ -33,14 +33,6 @@ Udacity created a simulator based on the Unity engine that uses real game physic
 * [Windows 32-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f4b6_simulator-windows-32/simulator-windows-32.zip)
 * [Windows 64-bit](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/5831f3a4_simulator-windows-64/simulator-windows-64.zip)
 
-Once you’ve downloaded it, extract it and run it.
-
-### Run Server
-
-Autonomous mode requires requires a server to receive steering commands.  Without the server not running, the car will just sit there in the simulated environment.
-
-`python drive.py model.json`
-
 ## Network
 
 ### Approach

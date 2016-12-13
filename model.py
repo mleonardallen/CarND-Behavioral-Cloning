@@ -1,15 +1,14 @@
 import numpy as np
 import pandas as pd
 import json
-import matplotlib.pyplot as plt
 import matplotlib.image as img
 from keras.preprocessing.image import ImageDataGenerator, Iterator, flip_axis
-from keras.layers.core import Dense, Flatten, Activation, SpatialDropout2D, Dropout, Lambda
+from keras.layers.core import Dense, Flatten, Activation, SpatialDropout2D, Lambda
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Convolution2D, Cropping2D
 from keras.layers.pooling import MaxPooling2D
 from keras.models import Sequential, Model
-from keras.regularizers import l2
+from sklearn.model_selection import train_test_split
 
 # 1. Read Data from Driving Log
 driving_log = pd.read_csv('driving_log.csv', index_col=False)
@@ -77,17 +76,16 @@ class SteeringIterator(Iterator):
             
         return batch_x, batch_y
 
-
 # 4. Define Pipeline
 input_shape = (160, 320, 3)
-cropping = ((40, 0), (0, 0))
+cropping = ((60, 0), (0, 0))
 
 def resize(X):
     import tensorflow
-    return tensorflow.image.resize_images(X, (24, 64))
+    return tensorflow.image.resize_images(X, (50, 120))
 
 model = Sequential([
-    # Preprocess 
+    # Preprocess
     Cropping2D(cropping=cropping, input_shape=input_shape),
     Lambda(resize),
     BatchNormalization(axis=1),
@@ -104,6 +102,9 @@ model = Sequential([
     Convolution2D(64, 3, 3, border_mode='same', activation='relu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
+    Convolution2D(64, 3, 3, border_mode='same', activation='relu'),
+    MaxPooling2D(border_mode='same'),
+    SpatialDropout2D(0.2),
     Flatten(),
     Dense(100, activation='relu'),
     Dense(50, activation='relu'),
@@ -112,14 +113,18 @@ model = Sequential([
 ])
 
 model.summary()
-model.compile(loss='mse', optimizer='adam')
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
 # 5. Train Model
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25)
+nb_val_samples = len(y_val)
 datagen = SteeringDataGenerator()
 model.fit_generator(
     datagen.flow(X_train, y_train, batch_size=128, shuffle=True, flip_prob=0.5),
-    nb_epoch=5,
-    samples_per_epoch=len(y_train)
+    samples_per_epoch=len(y_train),
+    validation_data=datagen.flow(X_val, y_val, batch_size=128, shuffle=True),
+    nb_val_samples=nb_val_samples,
+    nb_epoch=5
 )
 
 # 6. Save Model/Weights
