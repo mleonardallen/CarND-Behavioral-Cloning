@@ -69,7 +69,7 @@ The output from the forth convolutional layer is flattened and fed into a classi
 
 See the diagram below.  This diagram is modified from the original source diagram found in the the nVidia paper.  The values have been modified to represent input sizes of our recorded training data.
 
-![nVidia Architecture](./images/architecture.png)
+<div style="text-align:center"><img alt="nVidia Architecture" src="./images/architecture.png" /></div>
 
 ## Data Collection
 
