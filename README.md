@@ -55,11 +55,11 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 ### Architecture
 
-The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
+> The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
 
 ## Training
 
-The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
+> The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
 
 ### Data Collection
 
@@ -69,14 +69,27 @@ The README describes how the model was trained and what the characteristics of t
 
 ![Sample Images](./images/sample-images.png)
 
-### Image Generator
+### Pipeline
 
-The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
+#### Image Generator
 
-### Image Preprocessing
+> The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
+
+#### Image Preprocessing
 
 Image preprocessing is contained within the network pipeline.  This allows reuse so that no additional modifications are required within `drive.py`.
 
 First the image is cropped above the horizon to reduce the amount of information the network is required to learn.  Next the image is resized to further reduce required processing.  Finally normalization is applied to each mini-batch.  This helps keep weight values small, improving numerical stability. In addition since our mean is relatively close to 0, the gradient descent optimization will have less searching to do when minimizing loss.
 
 ![Image Preprocessing](./images/preprocess.png)
+
+#### 
+
+With the trained model, we can now run the simulator in autonomous mode.  Run the simulator in autonomous mode and start the driver server.
+
+```
+python drive.py model.json
+```
+
+The driver server sends predicted steering angles to the car using the trained network.  Here we can test how well the model performs.  If the car makes mistakes, we return to training mode to collect more training data on the problem areas.  It is also helpful to record recovery data, where recording starts when you are turning away from the edge back to the center.
+
