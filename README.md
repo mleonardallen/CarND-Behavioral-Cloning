@@ -57,7 +57,9 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 > The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
 
-> The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
+![nVidia Architecture](./images/architecture.png)
+
+
 
 ## Data Collection
 
@@ -73,7 +75,7 @@ We start by recording while driving normally around the track a few times.  Howe
 
 ## Training
 
-A trained model is to predict a steering angle given a camera image.  Before sending our images into the network for training, we can improve performance by limiting how much data is stored in memory as well as image preprocessing.
+A trained model is able to predict a steering angle given a camera image.  But, before sending our recorded images and steering angle data into the network for training, we can improve performance by limiting how much data is stored in memory as well as image preprocessing.
 
 ### Image Generator
 
@@ -89,7 +91,7 @@ First the image is cropped above the horizon to reduce the amount of information
 
 ### Network Output
 
-Once the network is trained, the model definition as well as the trained weights are saved so that the autonomous driving server can reconstruct the network to make predictions.
+Once the network is trained, the model definition as well as the trained weights are saved so that the autonomous driving server can reconstruct the network and make predictions given the live camera stream.
 
 Now we can run the simulator in autonomous mode and start the driver server.
 
