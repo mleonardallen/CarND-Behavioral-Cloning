@@ -73,9 +73,7 @@ We start by recording while driving normally around the track a few times.  Howe
 
 ## Training
 
-Once there is sufficient training data we can train our model.  After training, the model is able to predict a steering angle given a camera image.
-
-However, before sending our images into the network for training, we can improve performance by limiting how much data is stored in memory as well as image preprocessing.
+A trained model is to predict a steering angle given a camera image.  Before sending our images into the network for training, we can improve performance by limiting how much data is stored in memory as well as image preprocessing.
 
 ### Image Generator
 
@@ -89,13 +87,15 @@ First the image is cropped above the horizon to reduce the amount of information
 
 ![Image Preprocessing](./images/preprocess.png)
 
-### 
+### Network Output
 
-With the trained model, we can now run the simulator in autonomous mode.  Run the simulator in autonomous mode and start the driver server.
+Once the network is trained, the model definition as well as the trained weights are saved so that the autonomous driving server can reconstruct the network to make predictions.
+
+Now we can run the simulator in autonomous mode and start the driver server.
 
 ```
 python drive.py model.json
 ```
 
-The driver server sends predicted steering angles to the car using the trained network.  Here we can test how well the model performs.  If the car makes mistakes, we return to training mode to collect more training data.
+The autonomous driving server sends predicted steering angles to the car using the trained network.  Here we can test how well the model performs.  If the car makes mistakes, we return to training mode to collect more training data.
 
