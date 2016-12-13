@@ -57,23 +57,23 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 > The README provides sufficient details of the characteristics and qualities of the architecture, such as the type of model used, the number of layers, the size of each layer. Visualizations emphasizing particular qualities of the architecture are encouraged.
 
-## Training
-
 > The README describes how the model was trained and what the characteristics of the dataset are. Information such as how the dataset was generated and examples of images from the dataset should be included.
 
-### Data Collection
+## Data Collection
 
 ![Data Collection through Udacity Simulator](./images/data-collection.png)
+
+To begin recorded data includes driving normally around the track a few times.  However, it is also helpful to record recovery data, where recording starts when you are turning away from the edge back to the center.
 
 ### Sample Images
 
 ![Sample Images](./images/sample-images.png)
 
-### Pipeline
+## Training
 
 #### Image Generator
 
-> The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
+The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
 
 #### Image Preprocessing
 
@@ -91,5 +91,5 @@ With the trained model, we can now run the simulator in autonomous mode.  Run th
 python drive.py model.json
 ```
 
-The driver server sends predicted steering angles to the car using the trained network.  Here we can test how well the model performs.  If the car makes mistakes, we return to training mode to collect more training data on the problem areas.  It is also helpful to record recovery data, where recording starts when you are turning away from the edge back to the center.
+The driver server sends predicted steering angles to the car using the trained network.  Here we can test how well the model performs.  If the car makes mistakes, we return to training mode to collect more training data.
 
