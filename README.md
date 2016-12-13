@@ -49,11 +49,9 @@ Given that we are trying to map raw pixel data to a steering angle, the first th
 
 I considered using transfer learning using ImageNet weights along with a network such as VGG, ResNet, or GoogLeNet, however I consider images contained in ImageNet to be a lot different than those from the Udacity simulator.  If leveraging transfer learning, then perhaps extracting earlier layers could be useful where more specific features have not been learned.  Even though ImageNet is built on a classfication problem, since we can remove the top layers, we can still replace the final layer to output a single continuous value.
 
-Next, I took a look at the solution documented in the Nvidia paper, in which raw pixels are mapped steering commands.  This is remarkedly similar to our given problem.  Because of the similarity I decided it would be a good starting point.  The Nvidia architecture is small compared to the previously considered architectures with only 9 layers.  After experimenting with a rough replication of the network, I found that I could train relatively fast, and because of this, I decided that did not need transfer learning to complete this project, opting to stick with the simpler Nvidia network.
+Next, I took a look at the solution documented in the [NVIDIA Paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf), in which raw pixels are mapped steering commands.  This is remarkedly similar to our given problem.  Because of the similarity I decided it would be a good starting point.  The Nvidia architecture is small compared to the previously considered architectures with only 9 layers.  After experimenting with a rough replication of the network, I found that I could train relatively fast, and because of this, I decided that did not need transfer learning to complete this project, opting to stick with the simpler Nvidia network.
 
 One decision I made in designing the network was around code reuse.  I decided that all image preprocessing belongs in the pipeline itself as apposed to a separate process external to the pipeline.  With all image preprocessing in the pipeline, we are no longer required to modify `drive.py` with any modifications we make to image preprocessing.
-
-[NVIDIA Paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
 
 ### Architecture
 
