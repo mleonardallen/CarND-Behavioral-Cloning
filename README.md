@@ -61,6 +61,8 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 ## Data Collection
 
+Before running in autonomous mode we need to collect training data.
+
 ![Data Collection through Udacity Simulator](./images/data-collection.png)
 
 To begin recorded data includes driving normally around the track a few times.  However, it is also helpful to record recovery data, where recording starts when you are turning away from the edge back to the center.
