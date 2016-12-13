@@ -61,7 +61,7 @@ The README thoroughly discusses the approach taken for deriving and designing a 
 
 ## Data Collection
 
-In order to train our model to run in autonmous mode, we must first collect training data.
+In order for the car to drive in autonmous mode, we must first record training data and then train our model using the recorded data.
 
 ![Data Collection through Udacity Simulator](./images/data-collection.png)
 
@@ -73,11 +73,15 @@ We start by recording while driving normally around the track a few times.  Howe
 
 ## Training
 
-#### Image Generator
+Once there is sufficient training data we can train our model.  After training, the model is able to predict a steering angle given a camera image.
+
+However, before sending our images into the network for training, we can improve performance by limiting how much data is stored in memory as well as image preprocessing.
+
+### Image Generator
 
 The entire set of images used for training would consume a large amount of memory.  A python generator is leveraged so that only a single batch is contained in memory at a time.
 
-#### Image Preprocessing
+### Image Preprocessing
 
 Image preprocessing is contained within the network pipeline.  This allows reuse so that no additional modifications are required within `drive.py`.
 
@@ -85,7 +89,7 @@ First the image is cropped above the horizon to reduce the amount of information
 
 ![Image Preprocessing](./images/preprocess.png)
 
-#### 
+### 
 
 With the trained model, we can now run the simulator in autonomous mode.  Run the simulator in autonomous mode and start the driver server.
 
