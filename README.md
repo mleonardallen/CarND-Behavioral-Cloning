@@ -4,6 +4,8 @@
 
 In this project, a trained car drives in a simulated environment by cloning the behavior as seen during training mode.  Leveraging TensorFlow and Keras, a deep learning network predicts the proper steering angle given training examples.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/juPqoEllio8" frameborder="0" allowfullscreen></iframe>
+
 ## Dependencies
 
 Install Python Dependencies with Anaconda (conda install …)
