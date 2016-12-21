@@ -17,10 +17,12 @@ driving_log.columns = ['Center Image', 'Left Image', 'Right Image', 'Steering An
 # 2. Prepare Data for Generator
 X_train, y_train = [], []
 for index, row in driving_log.iterrows():
+    # Include center image and steering angle.
     X_train.append(row['Center Image'])
     y_train.append(row['Steering Angle'])
       
-    # left and right steering angles
+    # include left and right steering angles
+    # offset helps ensure car does not hug edge of the road.
     C = row['Steering Angle']
     L = C + 0.07
     R = C - 0.07
@@ -34,12 +36,25 @@ for index, row in driving_log.iterrows():
 X_train, y_train = np.array(X_train), np.array(y_train)
 
 # 3. Generator for Image/Steering Angle tuples
+# The entire set of images used for training would consume a large amount of memory. 
+# A python generator is leveraged so that only a single batch is contained in memory at a time.
 class SteeringDataGenerator(ImageDataGenerator):
 
     def flow(self, X, y=None, batch_size=32, shuffle=False, seed=None, flip_prob=0):
         return SteeringIterator(X, y, batch_size=batch_size, shuffle=shuffle, seed=seed, flip_prob=flip_prob)
 
 class SteeringIterator(Iterator):
+
+    '''Iterator for SteeringDataGenerator
+
+    Arguments
+        X: Numpy array, the image paths. Should have rank 1.
+        y: Numpy array, the steering angles.  Should have rank 1.
+        batch_size: int, minibatch size. (default 32)
+        shuffle: Boolean, shuffle with each epoch
+        seed: random seed.
+        flip_prob: float ∈[0,1] probability of horizontally flipping generated image
+    '''
 
     def __init__(self, X, y, batch_size=32, shuffle=False, seed=None, flip_prob=0):
 
@@ -51,9 +66,14 @@ class SteeringIterator(Iterator):
 
     def next(self):
 
+        # for python 2.x.
+        # Keeps under lock only the mechanism which advances
+        # the indexing of each batch
+        # see http://anandology.com/blog/using-iterators-and-generators/
         with self.lock:
             index_array, current_index, current_batch_size = next(self.index_generator)
 
+        # The generation of images is not under thread lock so it can be done in parallel
         batch_x, batch_y = None, None
         for batch_idx, source_idx in enumerate(index_array):
             # load the image from path
@@ -81,13 +101,17 @@ input_shape = (160, 320, 3)
 cropping = ((60, 0), (0, 0))
 
 def resize(X):
+    # import tensorflow here so module is available when recreating pipeline from saved json.
     import tensorflow
     return tensorflow.image.resize_images(X, (50, 120))
 
 model = Sequential([
     # Preprocess
+    # Crop above horizon to remove uneeded information and improve performance
+    # Resize images to improve performance
+    # Normalize to keep weight values small, improving numerical stability.
     Cropping2D(cropping=cropping, input_shape=input_shape),
-    Lambda(resize),
+    Lambda(resize), 
     BatchNormalization(axis=1),
     # Network
     Convolution2D(24, 5, 5, border_mode='same', activation='relu'),
