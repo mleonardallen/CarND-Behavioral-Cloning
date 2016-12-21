@@ -1,8 +1,11 @@
-# Self-Driving Car Engineer Nanodegree: Behavioral Cloning
+# Behavioral Cloning
+[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 ## Overview
 
 In this project, a trained car drives in a simulated environment by cloning the behavior as seen during training mode.  Leveraging TensorFlow and Keras, a deep learning network predicts the proper steering angle given training examples.
+
+[Demo Video](https://www.youtube.com/embed/juPqoEllio8)
 
 ## Dependencies
 
