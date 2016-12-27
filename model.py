@@ -4,6 +4,7 @@ import json
 import matplotlib.image as img
 from keras.preprocessing.image import ImageDataGenerator, Iterator, flip_axis
 from keras.layers.core import Dense, Flatten, Activation, SpatialDropout2D, Lambda, Dropout
+from keras.regularizers import l2
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Convolution2D, Cropping2D
 from keras.layers.pooling import MaxPooling2D
@@ -134,9 +135,9 @@ model = Sequential([
     # Flatten
     Flatten(),
     # Fully Connected
-    Dense(100, activation='elu', W_regularizer='l2'),
-    Dense(50, activation='elu', W_regularizer='l2'),
-    Dense(10, activation='elu'),
+    Dense(100, activation='elu', W_regularizer=l2(1e-6)),
+    Dense(50, activation='elu', W_regularizer=l2(1e-6)),
+    Dense(10, activation='elu', W_regularizer=l2(1e-6)),
     Dense(1)
 ])
 model.summary()

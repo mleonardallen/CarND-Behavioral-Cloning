@@ -50,9 +50,9 @@ One decision I made in designing the network was around code reuse.  I decided t
 
 After getting the initial network running, I experimented with different dropout layers and activation functions.  
 
-For activations, I read a [Paper on ELU Activations](https://arxiv.org/pdf/1511.07289v1.pdf), which led me to experiment, comparing the training time and loss for RELU vs ELU activations.  After several trials I concluded that ELUs did indeed give marginally faster performance, and also produced a lower loss.
+For activations, I read a [Paper on ELU Activations](https://arxiv.org/pdf/1511.07289v1.pdf), which led me to experiment, comparing the training time and loss for RELU vs ELU activations.  After several trials I concluded that ELUs did indeed give marginally faster performance and lower loss.  ELU activations offer the same protection against vanishing gradiant as RELU, and in addition, ELUs have negative values, which allows them to push the mean activations closer to zero, improving the efficiency of gradient descent.
 
-For dropout, I ran trials with values between 0.2 and 0.5 for fraction of inputs to drop, as well as which layers to include a dropout operation.  I found that my model performed poorly in autonomous mode when including dropout layers in the final fully connected layers.  My intuition here is that dropout may not be appropriate for every layer in regression problems.  In classification problems we are only concerned softmax probabilities relative to another class, so even if dropout effects the final value, it should not matter because we only care about the value relative to other classes.  With regression, we care about the final value, so dropout might have negative effects.
+For dropout, I ran trials with values between 0.2 and 0.5 for fraction of inputs to drop, as well as which layers to include a dropout operation.  I found that my model performed poorly in autonomous mode when including dropout layers in the final fully connected layers.  My intuition here is that dropout may not be appropriate for every layer in regression problems.  In classification problems we are only concerned softmax probabilities relative to another class, so even if dropout effects the final value, it should not matter because we only care about the value relative to other classes.  With regression, we care about the final value, so dropout might have negative effects.  To avoid this dilemma, I chose l2 regularization in the fully connected layers.  Initially, this prevented the model from producing sharp turns, but was fixed after reducing the weight penalty.
 
 ### Architecture
 
@@ -64,9 +64,9 @@ Each convolitional has a 1x1 stride, and uses a 2x2 max pooling operation to red
 
 For regularization, a spatial dropout operation is added after each convolutional layer.  Spatial dropout layers drop entire 2D features maps instead of individual features.
 
-For non-linearity, ELU activationd are used for each convolutional, as well as each fully connected layer.  ELU activations offer the same protection against vanishing gradiant as RELU, and in addition, ELUs have negative values, which allows them to push the mean activations closer to zero, improving the efficiency of gradient descent.
+For non-linearity, ELU activationd are used for each convolutional, as well as each fully connected layer.
 
-The output from the forth convolutional layer is flattened and fed into a classifier composed of four fully connected layers.  The fully connected layers each reduce the number of features with the final layer outputting a single coninuous value.
+The output from the forth convolutional layer is flattened and fed into a regressor composed of four fully connected layers.  The fully connected layers each reduce the number of features with the final layer outputting a single continuous value.  As noted above, l2 regularization is leveraged in the fully connected layers.
 
 See the diagram below.  This diagram is modified from the original source diagram found in the the [NVIDIA Paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf).  The values have been modified to represent input sizes of our recorded training data and to include the additional preprocessing layers.
 
@@ -96,7 +96,7 @@ The entire set of images used for training would consume a large amount of memor
 
 Image preprocessing is contained within the network pipeline.  This allows reuse so that no additional modifications are required within `drive.py`.
 
-First the image is cropped above the horizon to reduce the amount of information the network is required to learn.  Next the image is resized to further reduce required processing.  Finally normalization is applied to each mini-batch.  This helps keep weight values small, improving numerical stability. In addition since our mean is relatively close to 0, the gradient descent optimization will have less searching to do when minimizing loss.
+First the image is cropped above the horizon to reduce the amount of information the network is required to learn.  Next the image is resized to further reduce required processing.  Finally normalization is applied to each mini-batch.  This helps keep weight values small, improving numerical stability. In addition since our mean is relatively close to zero, the gradient descent optimization will have less searching to do when minimizing loss.
 
 ![Image Preprocessing](./images/preprocess.png)
 
