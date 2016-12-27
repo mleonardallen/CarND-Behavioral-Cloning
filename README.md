@@ -48,6 +48,12 @@ Next, I took a look at the solution documented in the [NVIDIA Paper](http://imag
 
 One decision I made in designing the network was around code reuse.  I decided that all image preprocessing belongs in the pipeline itself as apposed to a separate process external to the pipeline.  With all image preprocessing in the pipeline, we are no longer required to modify `drive.py` with any modifications we make to image preprocessing.
 
+After getting the initial network running, I experimented with different dropout layers and activation functions.  
+
+For activations, I read a [Paper on ELU Activations](https://arxiv.org/pdf/1511.07289v1.pdf), which led me to experiment, comparing the training time and loss for RELU vs ELU activations.  After several trials I concluded that ELUs did indeed give marginally faster performance, and also produced a lower loss.
+
+For dropout, I ran trials with values between 0.2 and 0.5 for fraction of inputs to drop, as well as which layers to include a dropout operation.  I found that my model performed poorly in autonomous mode when including dropout layers in the final fully connected layers.  My intuition here is that dropout may not be appropriate for every layer in regression problems.  In classification problems we are only concerned softmax probabilities relative to another class, so even if dropout effects the final value, it should not matter because we only care about the value relative to other classes.  With regression, we care about the final value, so dropout might have negative effects.
+
 ### Architecture
 
 My architecture is modeled after the network depicted in [NVIDIA Paper](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf).  The architecture is a traditional feed-foward layered architecture in which the output of one layer is fed to the layer above.  At a high level the network consists of preprocessing layers, 5 convolutional layers, followed by 3 fully connected layers, and a final output layer.  Since we are working with a regression problem, the output layer is a single continuous value, as apposed to the softmax probabilities used for classification tasks such as traffic sign identification.
@@ -58,7 +64,7 @@ Each convolitional has a 1x1 stride, and uses a 2x2 max pooling operation to red
 
 For regularization, a spatial dropout operation is added after each convolutional layer.  Spatial dropout layers drop entire 2D features maps instead of individual features.
 
-For non-linearity, RELU activationd are used for each convolutional, as well as each fully connected layer.
+For non-linearity, ELU activationd are used for each convolutional, as well as each fully connected layer.  ELU activations offer the same protection against vanishing gradiant as RELU, and in addition, ELUs have negative values, which allows them to push the mean activations closer to zero, improving the efficiency of gradient descent.
 
 The output from the forth convolutional layer is flattened and fed into a classifier composed of four fully connected layers.  The fully connected layers each reduce the number of features with the final layer outputting a single coninuous value.
 

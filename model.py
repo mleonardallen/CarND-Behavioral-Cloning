@@ -3,11 +3,12 @@ import pandas as pd
 import json
 import matplotlib.image as img
 from keras.preprocessing.image import ImageDataGenerator, Iterator, flip_axis
-from keras.layers.core import Dense, Flatten, Activation, SpatialDropout2D, Lambda
+from keras.layers.core import Dense, Flatten, Activation, SpatialDropout2D, Lambda, Dropout
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Convolution2D, Cropping2D
 from keras.layers.pooling import MaxPooling2D
 from keras.models import Sequential, Model
+from keras.objectives import mse
 from sklearn.model_selection import train_test_split
 
 # 1. Read Data from Driving Log
@@ -97,50 +98,57 @@ class SteeringIterator(Iterator):
         return batch_x, batch_y
 
 # 4. Define Pipeline
-input_shape = (160, 320, 3)
-cropping = ((60, 0), (0, 0))
-
 def resize(X):
     # import tensorflow here so module is available when recreating pipeline from saved json.
     import tensorflow
-    return tensorflow.image.resize_images(X, (50, 120))
+    return tensorflow.image.resize_images(X, (40, 160))
 
 model = Sequential([
     # Preprocess
-    # Crop above horizon to remove uneeded information and improve performance
+    # Crop above horizon and car hood to remove uneeded information
     # Resize images to improve performance
-    # Normalize to keep weight values small, improving numerical stability.
-    Cropping2D(cropping=cropping, input_shape=input_shape),
-    Lambda(resize), 
+    # Normalize to keep weight values small with zero mean, improving numerical stability.
+    Cropping2D(cropping=((60, 20), (0, 0)), input_shape=(160, 320, 3)),
+    Lambda(resize),
     BatchNormalization(axis=1),
-    # Network
-    Convolution2D(24, 5, 5, border_mode='same', activation='relu'),
+    # Conv 5x5
+    Convolution2D(24, 5, 5, border_mode='same', activation='elu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
-    Convolution2D(36, 5, 5, border_mode='same', activation='relu'),
+    # Conv 5x5
+    Convolution2D(36, 5, 5, border_mode='same', activation='elu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
-    Convolution2D(48, 3, 3, border_mode='same', activation='relu'),
+    # Conv 5x5
+    Convolution2D(48, 5, 5, border_mode='same', activation='elu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
-    Convolution2D(64, 3, 3, border_mode='same', activation='relu'),
+    # Conv 3x3
+    Convolution2D(64, 3, 3, border_mode='same', activation='elu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
-    Convolution2D(64, 3, 3, border_mode='same', activation='relu'),
+    # Conv 3x3
+    Convolution2D(64, 3, 3, border_mode='same', activation='elu'),
     MaxPooling2D(border_mode='same'),
     SpatialDropout2D(0.2),
+    # Flatten
     Flatten(),
-    Dense(100, activation='relu'),
-    Dense(50, activation='relu'),
-    Dense(10, activation='relu'),
+    # Fully Connected
+    Dense(100, activation='elu', W_regularizer='l2'),
+    Dense(50, activation='elu', W_regularizer='l2'),
+    Dense(10, activation='elu'),
     Dense(1)
 ])
-
 model.summary()
-model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
 
-# 5. Train Model
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25)
+# 5. Define Optimizer & Loss Function
+def loss(y_true, y_pred):
+    # loss is proportional to turning angle to reduce bias of straight paths
+    return mse(y_true, y_pred) * np.absolute(y_true)
+model.compile(loss='mse', optimizer='adam')
+
+# 6. Train Model
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train)
 nb_val_samples = len(y_val)
 datagen = SteeringDataGenerator()
 model.fit_generator(
@@ -151,7 +159,7 @@ model.fit_generator(
     nb_epoch=5
 )
 
-# 6. Save Model/Weights
+# 7. Save Model/Weights
 with open('model.json', 'w') as outfile:
     json.dump(model.to_json(), outfile)
 model.save_weights('model.h5')
